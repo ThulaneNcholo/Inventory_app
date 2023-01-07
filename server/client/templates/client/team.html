@@ -1,0 +1,77 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+<section
+  class="container sticky-top pt-5 pb-3"
+  style="background-color: #f9f9fc"
+>
+  <div class="row">
+    <div class="col-2">
+      <i
+        class="bi bi-chevron-left"
+        style="color: black; font-size: 20px"
+        onclick="history.back()"
+      ></i>
+    </div>
+    <div class="col fw-bold d-flex align-items-center">Team Members</div>
+  </div>
+</section>
+
+<section class="container mt-5">
+  <div class="row mb-4">
+    <div class="col-2">
+      <div class="meds-image"></div>
+    </div>
+    <div class="col">
+      <p class="mb-0 fw-bold">Thulane Ncholo</p>
+      <p class="mb-0">Confirmed</p>
+    </div>
+    <div class="col-2">
+      <i class="bi bi-chevron-right"></i>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col-2">
+      <div class="meds-image"></div>
+    </div>
+    <div class="col">
+      <p class="mb-0 fw-bold">Thulane Ncholo</p>
+      <p class="mb-0">Pending</p>
+    </div>
+    <div class="col-2">
+      <i class="bi bi-chevron-right"></i>
+    </div>
+  </div>
+</section>
+
+{% include 'partials/bottom_navbar.html' %}
+<!-- divider  -->
+
+{% endblock %}
+
+
+
+
+
+<!-- Convert to pdf xmhtml code  -->
+
+template_path = 'client/create_pdf.html'
+context = {'label': label,'logoImage': logoImage}
+
+# Create a Django response object, and specify content_type as pdf
+response = HttpResponse(content_type='application/pdf')
+response['Content-Disposition'] = 'attachment; filename="item_report.pdf"'
+# find the template and render it.
+template = get_template(template_path)
+html = template.render(context)
+
+# create a pdf
+pisa_status = pisa.CreatePDF(
+    html, dest=response)
+# if error then show some funny view
+if pisa_status.err:
+    return HttpResponse('We had some errors <pre>' + html + '</pre>')
+return response

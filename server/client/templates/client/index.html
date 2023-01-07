@@ -1,0 +1,474 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+
+<style>
+  .hero-icons {
+    font-size: 20px;
+    color: black;
+  }
+
+  .card-icon {
+    font-size: 22px;
+    color: var(--primary-color);
+  }
+
+  .arrow-icon {
+    font-size: 22px;
+    color: grey;
+  }
+
+  /* add inventory style  */
+  .add-inventory-icon {
+    font-size: 30px;
+    padding-bottom: 20px;
+    color: var(--primary-color);
+  }
+
+  .addStock-icons {
+    font-size: 25px;
+  }
+
+  .offcanvas-p {
+    font-weight: 600;
+    margin-bottom: 0px;
+  }
+
+  /* hero circle css  */
+  .circle_wrap {
+    position: relative;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .circle_wrap div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* NOTES STYLE  */
+  .note-p {
+    font-size: 12px;
+  }
+</style>
+
+<!-- hero name section  -->
+<section class="container">
+  <div class="d-flex justify-content-end">
+    <div>
+      <a href="{% url 'basket'%}">
+        <i
+          class="bi bi-bag-plus position-relative"
+          style="color: black; font-size: 20px"
+        >
+          <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            style="font-size: 12px"
+          >
+            {{basket_count}}
+          </span>
+        </i>
+      </a>
+    </div>
+    <div>
+      <i class="bi bi-plus-lg hero-icons px-3"></i>
+    </div>
+    <div>
+      <a
+        data-bs-toggle="offcanvas"
+        href="#notificationsOffcanvas"
+        role="button"
+        aria-controls="notificationsOffcanvas"
+      >
+        <i class="bi bi-bell hero-icons"></i>
+      </a>
+    </div>
+  </div>
+  <h3 class="fw-bold mt-4">Welcome Khotso</h3>
+
+  <!-- Notification offcanvas start  -->
+  <!-- add stock offcanvas  -->
+  <div
+    class="offcanvas offcanvas-bottom"
+    tabindex="-1"
+    id="notificationsOffcanvas"
+    aria-labelledby="notificationsOffcanvasLabel"
+  >
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="notificationsOffcanvasLabel">
+        Notifications
+      </h5>
+      <button
+        type="button"
+        class="btn-close text-reset"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="offcanvas-body">
+      <a href="{% url 'add_Inventory' %}">
+        <div class="row mb-3">
+          <div class="col-2">
+            <i class="bi bi-box addStock-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Add inventory</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="{% url 'bulk_Inventory' %}">
+        <div class="row">
+          <div class="col-2">
+            <i class="bi bi-boxes addStock-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Add Bulk</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- hero circles start  -->
+<section class="container mt-5">
+  <div class="row mx-0 py-3 rounded">
+    <div class="col-4">
+      <div class="circle_wrap mb-3">
+        <img src="{% static 'images/circleCount.svg'%}" alt="" />
+        <div class="fw-bold text-color">{{stockOut_Count}}</div>
+      </div>
+      <center>
+        <h6 style="font-size: 14px; color: #4f67ff">Stock Out</h6>
+      </center>
+    </div>
+    <div class="col-4">
+      <div class="circle_wrap mb-3">
+        <img src="{% static 'images/circleCount.svg'%}" alt="" />
+        <div class="fw-bold">{{stockIn_count}}</div>
+      </div>
+      <center>
+        <h6 class="text-success" style="font-size: 14px">Stock In</h6>
+      </center>
+    </div>
+    <div class="col-4">
+      <div class="circle_wrap mb-3">
+        <img src="{% static 'images/circleCount.svg'%}" alt="" />
+        <div class="fw-bold">{{lowInventory_count}}</div>
+      </div>
+      <center>
+        <h6 class="text-danger" style="font-size: 14px">Low Stock</h6>
+      </center>
+    </div>
+  </div>
+</section>
+
+<!-- weather section  -->
+<section class="container mt-5">
+  <div
+    class="text-white py-3 rounded container card-shadow"
+    style="background-color: #4f67ff"
+  >
+    <h6 class="fw-bold">Today</h6>
+    <h6>{{hero_date}}</h6>
+    <h6 style="font-size: 14px">22°C Mostly cloudy</h6>
+  </div>
+</section>
+
+<!-- action card components  -->
+<section class="container mt-5">
+  <a
+    data-bs-toggle="offcanvas"
+    href="#addstockOffcanvas"
+    role="button"
+    aria-controls="addstockOffcanvas"
+  >
+    <div class="bg-white px-3 py-4 rounded card-shadow mb-4">
+      <h4 class="mb-3 fw-bold">Stock In</h4>
+      <div class="row">
+        <div class="col-2">
+          <i class="bi bi-arrow-bar-down card-icon text-success"></i>
+        </div>
+        <div class="col d-flex align-items-center text-black">
+          Add Medication
+        </div>
+        <div class="col-2">
+          <i class="bi bi-arrow-right-circle arrow-icon"></i>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <!-- add stock offcanvas  -->
+  <div
+    class="offcanvas offcanvas-bottom"
+    tabindex="-1"
+    id="addstockOffcanvas"
+    aria-labelledby="addstockOffcanvasLabel"
+  >
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="addstockOffcanvasLabel">
+        Add Inventory Options
+      </h5>
+      <button
+        type="button"
+        class="btn-close text-reset"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="offcanvas-body">
+      <a href="{% url 'add_Inventory' %}">
+        <div class="row mb-3">
+          <div class="col-2">
+            <i class="bi bi-box addStock-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Add inventory</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="{% url 'bulk_Inventory' %}">
+        <div class="row">
+          <div class="col-2">
+            <i class="bi bi-boxes addStock-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Add Bulk</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Stock Out start  -->
+  <a
+    data-bs-toggle="offcanvas"
+    href="#stockout"
+    role="button"
+    aria-controls="stockout"
+    style="color: black"
+  >
+    <div class="bg-white px-3 py-4 rounded card-shadow mb-4">
+      <h4 class="mb-3 fw-bold">Stock Out</h4>
+      <div class="row">
+        <div class="col-2">
+          <i class="bi bi-arrow-bar-up card-icon" style="color: #4f67ff"></i>
+        </div>
+        <div class="col d-flex align-items-center">Prescribe Medication</div>
+        <div class="col-2">
+          <i class="bi bi-arrow-right-circle arrow-icon"></i>
+        </div>
+      </div>
+    </div>
+  </a>
+  <!-- Stock Out offcanvas start  -->
+  <div
+    class="offcanvas offcanvas-bottom"
+    tabindex="-1"
+    id="stockout"
+    aria-labelledby="stockoutLabel"
+  >
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="stockoutLabel">Stock Out</h5>
+      <button
+        type="button"
+        class="btn-close text-reset"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="offcanvas-body">
+      <a href="{% url 'scanner' %}">
+        <div class="row mb-3">
+          <div class="col-2">
+            <i class="bi bi-upc-scan addStock-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Scan Qr Code</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="{% url 'stock_out' %}">
+        <div class="row">
+          <div class="col-2">
+            <i class="bi bi-search addStock-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Search Inventory</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Low STOCK inventory start  -->
+  <a href="{% url 'low_stock' %}" style="color: black">
+    <div class="bg-white px-3 py-4 rounded card-shadow mb-4">
+      <h4 class="mb-3 fw-bold">Low Stock</h4>
+      <div class="row">
+        <div class="col-2">
+          <i class="bi bi-stack-overflow card-icon text-danger"></i>
+        </div>
+        <div class="col d-flex align-items-center">low Stock Inventory</div>
+        <div class="col-2">
+          <i class="bi bi-arrow-right-circle arrow-icon"></i>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <a href="{% url 'scanner' %}" style="color: black">
+    <div class="bg-white px-3 py-4 rounded card-shadow mb-4">
+      <h4 class="mb-3 fw-bold">QR Code</h4>
+      <div class="row">
+        <div class="col-2">
+          <i class="bi bi-upc-scan card-icon"></i>
+        </div>
+        <div class="col d-flex align-items-center">Scan Inventory Item</div>
+        <div class="col-2">
+          <i class="bi bi-arrow-right-circle arrow-icon"></i>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <a href="{% url 'labels' %}" style="color: black">
+    <div class="bg-white px-3 py-4 rounded card-shadow mb-4">
+      <h4 class="mb-3 fw-bold">Create Label</h4>
+      <div class="row">
+        <div class="col-2">
+          <i class="bi bi-stickies card-icon"></i>
+        </div>
+        <div class="col d-flex align-items-center">
+          Create Medication Labels
+        </div>
+        <div class="col-2">
+          <i class="bi bi-arrow-right-circle arrow-icon"></i>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <a href="{% url 'transactions' %}" style="color: black">
+    <div class="bg-white px-3 py-4 rounded card-shadow mb-4">
+      <h4 class="mb-3 fw-bold">Past Transactions</h4>
+      <div class="row">
+        <div class="col-2">
+          <i class="bi bi-card-list card-icon"></i>
+        </div>
+        <div class="col d-flex align-items-center">Prescription History</div>
+        <div class="col-2">
+          <i class="bi bi-arrow-right-circle arrow-icon"></i>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <a href="{% url 'inventory'%}" style="color: black">
+    <div class="bg-white px-3 py-4 rounded card-shadow mb-4">
+      <h4 class="mb-3 fw-bold">Medication List</h4>
+      <div class="row">
+        <div class="col-2">
+          <i class="bi bi-capsule-pill card-icon"></i>
+        </div>
+        <div class="col d-flex align-items-center">Clinic Inventory</div>
+        <div class="col-2">
+          <i class="bi bi-arrow-right-circle arrow-icon"></i>
+        </div>
+      </div>
+    </div>
+  </a>
+</section>
+
+<!-- Notes Section  -->
+<!-- <section class="container mt-5">
+  <div class="row mb-4">
+    <div class="col d-flex align-items-center">
+      <h4 class="fw-bold mb-0 pb-0">Notes</h4>
+    </div>
+    <div class="col-3">
+      <a href="{% url 'notes' %}">
+        <i class="bi bi-plus-circle arrow-icon"></i>
+      </a>
+    </div>
+  </div>
+  <div class="row mx-0">
+    <div
+      class="col"
+      style="padding-left: 3px !important; padding-right: 3px !important"
+    >
+      <div
+        class="text-white py-3 rounded px-2"
+        style="background-color: #4f67ff"
+      >
+        <h6 class="fw-bold">Note Name</h6>
+        <div class="row mb-3">
+          <div class="col-1">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <div class="col">
+            <p class="note-p">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1">
+            <i class="bi bi-check-circle"></i>
+          </div>
+          <div class="col">
+            <p class="note-p">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="col"
+      style="padding-left: 3px !important; padding-right: 3px !important"
+    >
+      <div
+        class="text-white py-3 rounded px-2"
+        style="background-color: #4f67ff"
+      >
+        <h6 class="fw-bold">Note Name</h6>
+        <div class="row mb-3">
+          <div class="col-1">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <div class="col">
+            <p class="note-p">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1">
+            <i class="bi bi-check-circle"></i>
+          </div>
+          <div class="col">
+            <p class="note-p">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+{% include 'partials/bottom_navbar.html' %}
+<!-- divider  -->
+{% endblock %}

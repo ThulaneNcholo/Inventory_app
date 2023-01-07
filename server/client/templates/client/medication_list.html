@@ -1,0 +1,498 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+
+<style>
+  /* hero circle css  */
+  .circle_wrap {
+    position: relative;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .circle_wrap div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .view-icon {
+    font-size: 18px;
+  }
+
+  .offcanvas-bottom {
+    height: 35vh;
+  }
+
+  .offcanvas-icons {
+    font-size: 20px;
+    color: black;
+  }
+
+  .offcanvas-p {
+    font-weight: 600;
+    margin-bottom: 0px;
+  }
+</style>
+
+<section
+  class="container sticky-top pt-5 pb-3"
+  style="background-color: #f9f9fc"
+>
+  <div class="row">
+    <div class="col-2">
+      <i
+        class="bi bi-chevron-left"
+        style="color: black; font-size: 20px"
+        onclick="history.back()"
+      ></i>
+    </div>
+    <div class="col fw-bold d-flex align-items-center">ALL MEDICATION</div>
+    <div class="col-3">
+      <div class="d-flex justify-content-between">
+        <!-- add offcanvas  -->
+        <a
+          data-bs-toggle="offcanvas"
+          href="#addbutton"
+          role="button"
+          aria-controls="addbutton"
+          style="color: black"
+        >
+          <i class="bi bi-plus-lg" style="font-size: 20px"></i>
+        </a>
+
+        <!-- filter offcanvas  -->
+        <a
+          data-bs-toggle="offcanvas"
+          href="#lowstockOptions"
+          role="button"
+          aria-controls="lowstockOptions"
+          style="color: black"
+        >
+          <i class="bi bi-funnel" style="font-size: 20px"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add button Stock Options offcans -->
+<div
+  class="offcanvas offcanvas-bottom"
+  tabindex="-1"
+  id="addbutton"
+  aria-labelledby="addbuttonLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="addbuttonLabel"></h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <a href="{% url 'add_Inventory' %}">
+      <div class="row mb-3">
+        <div class="col-2">
+          <i class="bi bi-box addStock-icons"></i>
+        </div>
+        <div class="col d-flex align-items-center">
+          <p class="offcanvas-p">Add inventory</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="{% url 'bulk_Inventory' %}">
+      <div class="row mb-3">
+        <div class="col-2">
+          <i class="bi bi-boxes addStock-icons"></i>
+        </div>
+        <div class="col d-flex align-items-center">
+          <p class="offcanvas-p">Add Bulk</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="{% url 'scanner' %}">
+      <div class="row">
+        <div class="col-2">
+          <i class="bi bi-qr-code-scan addStock-icons"></i>
+        </div>
+        <div class="col d-flex align-items-center">
+          <p class="offcanvas-p">Scan Qr Code</p>
+        </div>
+      </div>
+    </a>
+
+    <!-- <a href="#">
+      <div class="row mb-3">
+        <div class="col-2">
+          <i class="bi bi-receipt addStock-icons offcanvas-icons"></i>
+        </div>
+        <div class="col d-flex align-items-center">
+          <p class="offcanvas-p">Create Invoice</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="#">
+      <div class="row mb-3">
+        <div class="col-2">
+          <i class="bi bi-file-earmark-pdf addStock-icons offcanvas-icons"></i>
+        </div>
+        <div class="col d-flex align-items-center">
+          <p class="offcanvas-p">Download PDF</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="#">
+      <div class="row mb-3">
+        <div class="col-2">
+          <i class="bi bi-filetype-exe addStock-icons offcanvas-icons"></i>
+        </div>
+        <div class="col d-flex align-items-center">
+          <p class="offcanvas-p">Download EXEL</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="#">
+      <div class="row mb-3">
+        <div class="col-2">
+          <i class="bi bi-filetype-csv addStock-icons offcanvas-icons"></i>
+        </div>
+        <div class="col d-flex align-items-center">
+          <p class="offcanvas-p">Download CVS</p>
+        </div>
+      </div>
+    </a> -->
+  </div>
+</div>
+
+<!-- Low Stock Options offcans -->
+<div
+  class="offcanvas offcanvas-bottom"
+  tabindex="-1"
+  id="lowstockOptions"
+  aria-labelledby="lowstockOptionsLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="lowstockOptionsLabel"></h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <form action="" method="POST">
+      {% csrf_token %}
+
+      <div class="row mb-3">
+        <div class="col">
+          <a onclick="lowHigh(event)">
+            <div class="row">
+              <div class="col-2">
+                <i
+                  class="bi bi-sort-numeric-down addStock-icons offcanvas-icons"
+                ></i>
+              </div>
+              <div class="col d-flex align-items-center">
+                <p class="offcanvas-p">Lowest to Highest</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-2 px-0" style="display: none" id="low-check">
+          <i
+            onclick="removeLow(event)"
+            class="bi bi-check-circle-fill position-relative"
+            style="color: #4f67ff"
+          >
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge p-0"
+            >
+              <i class="bi bi-x text-dark" style="font-size: 13px"></i>
+            </span>
+          </i>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">
+          <a onclick="Highlow(event)">
+            <div class="row">
+              <div class="col-2">
+                <i
+                  class="bi bi-sort-numeric-up-alt addStock-icons offcanvas-icons"
+                ></i>
+              </div>
+              <div class="col d-flex align-items-center">
+                <p class="offcanvas-p">Higest to Lowest</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-2" style="display: none" id="high-check">
+          <i
+            onclick="removeHigh(event)"
+            class="bi bi-check-circle-fill position-relative"
+            style="color: #4f67ff"
+          >
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge p-0"
+            >
+              <i class="bi bi-x text-dark" style="font-size: 13px"></i>
+            </span>
+          </i>
+        </div>
+      </div>
+
+      <a onclick="shelf(event)">
+        <div class="row mb-3">
+          <div class="col-2">
+            <i class="bi bi-calendar2-check addStock-icons offcanvas-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Shelf</p>
+          </div>
+          <div class="col-2" style="display: none" id="shelf-icon">
+            <i
+              class="bi bi-check-circle-fill position-relative"
+              style="color: #4f67ff"
+            >
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge p-0"
+              >
+                <i class="bi bi-x text-dark" style="font-size: 13px"></i>
+              </span>
+            </i>
+          </div>
+        </div>
+      </a>
+
+      <!-- filter inputs hidden  -->
+      <div>
+        <input
+          type="text"
+          value=""
+          name="low-high"
+          id="low-high"
+          hidden="True"
+        />
+        <input
+          type="text"
+          value=""
+          name="high-low"
+          id="high-low"
+          hidden="True"
+        />
+        <input
+          type="text"
+          value=""
+          name="shelf"
+          id="shelf-input"
+          hidden="True"
+        />
+      </div>
+
+      <!-- submit button  -->
+      <button
+        type="submit"
+        name="filter_lowInventory"
+        class="btn button-style my-3"
+      >
+        Filter Inventory
+      </button>
+    </form>
+  </div>
+</div>
+
+{% for message in messages %}
+<section class="container mt-5">
+  <div class="alert alert-primary" role="alert">{{message}}</div>
+</section>
+{% endfor %}
+
+<!-- hero container start  -->
+<section class="container mt-5">
+  <div class="row mx-0 py-3 rounded" style="background-color: #e9ecef">
+    <div class="col-4">
+      <div class="circle_wrap mb-3">
+        <img src="{% static 'images/circleCount.svg'%}" alt="" />
+        <div class="fw-bold">{{inventoryCount}}</div>
+      </div>
+      <center>
+        <h6 style="font-size: 14px">Inventory</h6>
+      </center>
+    </div>
+    <div class="col-4">
+      <div class="circle_wrap mb-3">
+        <img src="{% static 'images/circleCount.svg'%}" alt="" />
+        <div class="text-danger fw-bold">{{lowInventory_count}}</div>
+      </div>
+      <center>
+        <h6 style="font-size: 14px">low Stock</h6>
+      </center>
+    </div>
+    <div class="col-4">
+      <div class="circle_wrap mb-3">
+        <img src="{% static 'images/circleCount.svg'%}" alt="" />
+        <div class="fw-bold">{{shelf_inventory}}</div>
+      </div>
+      <center>
+        <h6 style="font-size: 14px">Shelf</h6>
+      </center>
+    </div>
+  </div>
+</section>
+
+<div class="background_wrap"></div>
+
+<!-- New Search Component start  -->
+<section class="container my-5">
+  <form action="" method="POST" autocomplete="off">
+    {% csrf_token %}
+    <div class="row py-3 mx-0 rounded border" style="background-color: white">
+      <div class="col d-flex align-items-center">
+        <button
+          type="sumit"
+          class="border-0 p-0 m-0"
+          style="background-color: transparent"
+          name="search"
+        >
+          <i
+            class="bi bi-search card-icon text-secondary"
+            style="color: black"
+          ></i>
+        </button>
+      </div>
+      <div class="col-8 px-0">
+        <input
+          class="border-0 py-2 px-1"
+          style="background-color: white"
+          type="text"
+          placeholder="Med Name | QR Number"
+          name="search_input"
+          onfocus="infocus(this)"
+          onfocusout="outfocus()"
+        />
+      </div>
+      <div class="col d-flex align-items-center">
+        <a href="{% url 'scanner' %}">
+          <i class="bi bi-upc-scan card-icon"></i>
+        </a>
+      </div>
+    </div>
+  </form>
+</section>
+
+<!-- medication list  -->
+<section class="container">
+  {% for data in medication_data %}
+  <a href="{% url 'inventory_details' data.id %}" style="color: black">
+    <div class="bg-light">
+      <div class="row pt-4">
+        <div class="col-2">
+          {% if data.Medication_Image %}
+          <img class="meds-image" src="{{data.Medication_Image.url}}" alt="" />
+          {% else %}
+          <i class="bi bi-capsule-pill image-icon"></i>
+          {% endif %}
+        </div>
+        <div class="col">
+          <p class="mb-0 fw-bold">{{data.Medication_Name}}</p>
+          <p class="my-0">#{{data.Qr_Code}}</p>
+        </div>
+        <div class="col-4" style="font-size: 14px">
+          <p class="mb-0 text-secondary">{{data.date_created|date:"l,d M"}}</p>
+          {% if data.Quantity <= data.ReStock_Level %}
+          <p class="my-0 fw-bold text-danger">
+            {{data.Quantity}} <span style="color: #4f67ff">Qty</span>
+          </p>
+          {% else %}
+          <p class="my-0 fw-bold">
+            {{data.Quantity}} <span style="color: #4f67ff">Qty</span>
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </a>
+  {% empty %}
+  <center>
+    <h3 class="mt-4">No data Found</h3>
+  </center>
+  {% endfor %}
+</section>
+
+<div id="bottomNav">{% include 'partials/bottom_navbar.html' %}</div>
+
+<!-- divider  -->
+
+<script>
+  function lowHigh(event) {
+    event.preventDefault();
+    document.getElementById("low-high").value = "low-high";
+    document.getElementById("low-check").style.display = "block";
+
+    // toggle function
+    document.getElementById("high-low").value = "";
+    document.getElementById("high-check").style.display = "None";
+  }
+
+  function Highlow(event) {
+    event.preventDefault();
+    document.getElementById("high-low").value = "high-low";
+    document.getElementById("high-check").style.display = "block";
+
+    // toggle function
+    document.getElementById("low-high").value = "";
+    document.getElementById("low-check").style.display = "None";
+  }
+
+  function shelf(event) {
+    event.preventDefault();
+    var x = document.getElementById("shelf-icon");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+      document.getElementById("shelf-input").value = "shelf";
+    } else {
+      x.style.display = "none";
+      document.getElementById("shelf-input").value = "";
+    }
+  }
+
+  function removeLow(event) {
+    event.preventDefault();
+    document.getElementById("low-high").value = "";
+    document.getElementById("low-check").style.display = "None";
+  }
+
+  function removeHigh(event) {
+    event.preventDefault();
+    document.getElementById("high-low").value = "";
+    document.getElementById("high-check").style.display = "None";
+  }
+
+  // hide bottom navbar when in focus
+  function infocus(x) {
+    navbar = document.getElementById("bottomNav").style.display = "none";
+  }
+
+  // show bottom navbar when out of focus
+  function outfocus() {
+    navbar = document.getElementById("bottomNav").style.display = "block";
+  }
+</script>
+{% endblock %}

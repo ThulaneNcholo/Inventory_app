@@ -1,0 +1,158 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+
+<style>
+  /* add inventory style  */
+  .add-inventory-icon {
+    font-size: 30px;
+    padding-bottom: 20px;
+    color: var(--primary-color);
+  }
+
+  .image-container {
+    height: 100px;
+    width: 100px;
+    background-color: lightgray;
+  }
+
+  .button-style {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .form-style {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: none;
+    background-color: var(--secondary-color);
+  }
+
+  .label-style {
+    font-size: 14px;
+    color: grey;
+  }
+
+  .offcanvas-bottom {
+    height: 60vh;
+  }
+
+  .floating-style {
+    background-color: var(--secondary-color);
+  }
+  .file-upload-button {
+    background-color: #4f67ff !important;
+  }
+</style>
+
+<form method="POST" autocomplete="off" enctype="multipart/form-data">
+  {% csrf_token %}
+  <section
+    class="container sticky-top pt-5 pb-3"
+    style="background-color: #f9f9fc"
+  >
+    <div class="row base-align">
+      <div class="col-2">
+        <i
+          class="bi bi-chevron-left"
+          style="color: black; font-size: 20px"
+          onclick="history.back()"
+        ></i>
+      </div>
+      <div class="col fw-bold">ADD STOCK</div>
+      <div class="col-3 fw-bold">
+        <button
+          class="border-0"
+          type="submit"
+          name="add_Inventory"
+          style="background-color: transparent"
+        >
+          <span style="color: #4f67ff">SAVE</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="container mt-5">
+    <div class="row">
+      <div class="col">
+        <p>Image :</p>
+      </div>
+      <div class="col">
+        <input type="file" name="med_Image" required />
+      </div>
+    </div>
+  </section>
+
+  <div style="height: 50px; width: 100%"></div>
+
+  <!-- Form section start  -->
+  <section class="container">
+    <div class="form-floating mb-4">
+      <input
+        type="text"
+        class="form-control floating-style"
+        id="MedicationName"
+        placeholder="medication name"
+        name="medicationName"
+        required
+      />
+      <label for="floatingInput">Medication Name</label>
+    </div>
+    <div class="form-floating mb-4">
+      <textarea
+        class="form-control floating-style"
+        placeholder="Leave a comment here"
+        id="floatingTextarea2"
+        style="height: 100px"
+        name="description"
+      ></textarea>
+      <label for="floatingTextarea2">Description</label>
+    </div>
+    <div class="row mb-4">
+      <div class="col">
+        <div class="form-floating">
+          <input
+            type="number"
+            class="form-control floating-style"
+            id="floatingInput"
+            placeholder="Quantity"
+            name="Quantity"
+            required
+          />
+          <label for="floatingInput">Quantity</label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-floating">
+          <input
+            type="number"
+            class="form-control floating-style"
+            id="floatingInput"
+            placeholder="restock level"
+            name="Restock"
+            required
+          />
+          <label for="floatingInput">Restock Level</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-floating mb-5">
+      <input
+        type="text"
+        class="form-control floating-style"
+        id="floatingInput"
+        placeholder="Medication Size"
+        name="Size"
+      />
+      <label for="floatingInput">Medication Size</label>
+    </div>
+  </section>
+</form>
+
+<!-- divider  -->
+
+{% endblock %}

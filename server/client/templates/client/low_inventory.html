@@ -1,0 +1,357 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+
+<style>
+  /* add inventory style  */
+  .add-inventory-icon {
+    font-size: 30px;
+    padding-bottom: 20px;
+    color: var(--primary-color);
+  }
+
+  /* low stock inventory icon  */
+  .view-icon {
+    font-size: 18px;
+  }
+
+  .offcanvas-bottom {
+    height: 30vh;
+  }
+
+  .offcanvas-icons {
+    font-size: 20px;
+    color: black;
+  }
+
+  .offcanvas-p {
+    font-weight: 600;
+    margin-bottom: 0px;
+  }
+</style>
+
+<section
+  class="container sticky-top pt-5 pb-3"
+  style="background-color: #f9f9fc"
+>
+  <div class="row">
+    <div class="col-2">
+      <i
+        class="bi bi-chevron-left"
+        style="color: black; font-size: 20px"
+        onclick="history.back()"
+      ></i>
+    </div>
+    <div class="col fw-bold d-flex align-items-center">LOW STOCK INVENTORY</div>
+    <div class="col-2">
+      <a
+        data-bs-toggle="offcanvas"
+        href="#lowstockOptions"
+        role="button"
+        aria-controls="lowstockOptions"
+        style="color: black"
+      >
+        <i class="bi bi-funnel" style="font-size: 20px"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Low Stock Options offcans -->
+<div
+  class="offcanvas offcanvas-bottom"
+  tabindex="-1"
+  id="lowstockOptions"
+  aria-labelledby="lowstockOptionsLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="lowstockOptionsLabel"></h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <form action="" method="POST">
+      {% csrf_token %}
+
+      <div class="row mb-3">
+        <div class="col">
+          <a onclick="lowHigh(event)">
+            <div class="row">
+              <div class="col-2">
+                <i
+                  class="bi bi-sort-numeric-down addStock-icons offcanvas-icons"
+                ></i>
+              </div>
+              <div class="col d-flex align-items-center">
+                <p class="offcanvas-p">Lowest to Highest</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-2 px-0" style="display: none" id="low-check">
+          <i
+            onclick="removeLow(event)"
+            class="bi bi-check-circle-fill position-relative"
+            style="color: #4f67ff"
+          >
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge p-0"
+            >
+              <i class="bi bi-x text-dark" style="font-size: 13px"></i>
+            </span>
+          </i>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">
+          <a onclick="Highlow(event)">
+            <div class="row">
+              <div class="col-2">
+                <i
+                  class="bi bi-sort-numeric-up-alt addStock-icons offcanvas-icons"
+                ></i>
+              </div>
+              <div class="col d-flex align-items-center">
+                <p class="offcanvas-p">Higest to Lowest</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-2" style="display: none" id="high-check">
+          <i
+            onclick="removeHigh(event)"
+            class="bi bi-check-circle-fill position-relative"
+            style="color: #4f67ff"
+          >
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge p-0"
+            >
+              <i class="bi bi-x text-dark" style="font-size: 13px"></i>
+            </span>
+          </i>
+        </div>
+      </div>
+
+      <!-- <a href="#">
+        <div class="row mb-3">
+          <div class="col-2">
+            <i class="bi bi-receipt addStock-icons offcanvas-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Create Invoice</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="#">
+        <div class="row mb-3">
+          <div class="col-2">
+            <i
+              class="bi bi-file-earmark-pdf addStock-icons offcanvas-icons"
+            ></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Download PDF</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="#">
+        <div class="row mb-3">
+          <div class="col-2">
+            <i class="bi bi-filetype-exe addStock-icons offcanvas-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Download EXEL</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="#">
+        <div class="row mb-3">
+          <div class="col-2">
+            <i class="bi bi-filetype-csv addStock-icons offcanvas-icons"></i>
+          </div>
+          <div class="col d-flex align-items-center">
+            <p class="offcanvas-p">Download CVS</p>
+          </div>
+        </div>
+      </a> -->
+
+      <div>
+        <input
+          type="text"
+          value=""
+          name="low-high"
+          id="low-high"
+          hidden="True"
+        />
+        <input
+          type="text"
+          value=""
+          name="high-low"
+          id="high-low"
+          hidden="True"
+        />
+      </div>
+
+      <button
+        type="submit"
+        name="filter_lowInventory"
+        class="btn button-style my-3"
+      >
+        Filter Inventory
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- New Search Component start  -->
+<section class="container my-5">
+  <form action="" method="POST" autocomplete="off">
+    {% csrf_token %}
+    <div class="row py-3 mx-0 rounded border" style="background-color: white">
+      <div class="col d-flex align-items-center">
+        <button
+          type="sumit"
+          class="border-0 p-0 m-0"
+          style="background-color: transparent"
+          name="search"
+        >
+          <i
+            class="bi bi-search card-icon text-secondary"
+            style="color: black"
+          ></i>
+        </button>
+      </div>
+      <div class="col-8 px-0">
+        <input
+          class="border-0 py-2 px-1"
+          style="background-color: white"
+          type="text"
+          placeholder="Medication Name"
+          name="search_input"
+          onfocus="infocus(this)"
+          onfocusout="outfocus()"
+        />
+      </div>
+      <div class="col d-flex align-items-center">
+        <i class="bi bi-upc-scan card-icon"></i>
+      </div>
+    </div>
+  </form>
+</section>
+
+<!-- Table section start  -->
+<section class="container mt-5">
+  <div class="row text-white py-3 mb-3" style="background-color: #4f67ff">
+    <div class="col">Name</div>
+    <div class="col-3">Qty</div>
+    <div class="col-3">View</div>
+  </div>
+
+  {% for data in lowInventory %}
+  <a href="{% url 'inventory_details' data.id%}" style="color: black">
+    <div class="bg-light">
+      <div class="row pt-3">
+        <div class="col fw-bold">{{data.Medication_Name}}</div>
+        <div class="col-3 text-danger">{{data.Quantity}}</div>
+        <div class="col-3">
+          <i class="bi bi-arrow-right-square-fill view-icon"></i>
+        </div>
+      </div>
+      <hr />
+    </div>
+  </a>
+  {% empty %}
+  <center>
+    <h3 class="mt-4">No data Found</h3>
+  </center>
+  {% endfor %}
+</section>
+
+<!-- create option  -->
+<!-- <section class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <h6>Create Option</h6>
+    </div>
+    <div class="col-3 fw-bold" style="color: #4f67ff">ALL</div>
+  </div>
+  <div class="bg-light">
+    <div class="row pt-3">
+      <div class="col fw-bold">Medication Name</div>
+      <div class="col-3">20</div>
+      <div class="col-3">
+        <i class="bi bi-check-circle-fill view-icon"></i>
+      </div>
+    </div>
+    <hr />
+  </div>
+  <div class="bg-light">
+    <div class="row pt-3">
+      <div class="col fw-bold">Medication Name</div>
+      <div class="col-3">20</div>
+      <div class="col-3">
+        <i class="bi bi-check-circle view-icon"></i>
+      </div>
+    </div>
+    <hr />
+  </div>
+</section> -->
+
+<div id="bottomNav">{% include 'partials/bottom_navbar.html' %}</div>
+<!-- divider  -->
+
+<script>
+  function lowHigh(event) {
+    event.preventDefault();
+    document.getElementById("low-high").value = "low-high";
+    document.getElementById("low-check").style.display = "block";
+
+    // toggle function
+    document.getElementById("high-low").value = "";
+    document.getElementById("high-check").style.display = "None";
+  }
+
+  function Highlow(event) {
+    event.preventDefault();
+    document.getElementById("high-low").value = "high-low";
+    document.getElementById("high-check").style.display = "block";
+
+    // toggle function
+    document.getElementById("low-high").value = "";
+    document.getElementById("low-check").style.display = "None";
+  }
+
+  function removeLow(event) {
+    event.preventDefault();
+    document.getElementById("low-high").value = "";
+    document.getElementById("low-check").style.display = "None";
+  }
+
+  function removeHigh(event) {
+    event.preventDefault();
+    document.getElementById("high-low").value = "";
+    document.getElementById("high-check").style.display = "None";
+  }
+
+  // hide bottom navbar when in focus
+  function infocus(x) {
+    navbar = document.getElementById("bottomNav").style.display = "none";
+  }
+
+  // show bottom navbar when out of focus
+  function outfocus() {
+    navbar = document.getElementById("bottomNav").style.display = "block";
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,253 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+
+<style>
+  /* add inventory style  */
+  .add-inventory-icon {
+    font-size: 30px;
+    padding-bottom: 20px;
+    color: var(--primary-color);
+  }
+
+  /* Medication style start  */
+  .meds-image {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: lightgrey;
+  }
+
+  .limit-text {
+    -webkit-line-clamp: 2;
+  }
+</style>
+<section class="container">
+  <div class="row">
+    <div class="col-2">
+      <i
+        class="bi bi-chevron-left"
+        style="color: black; font-size: 20px"
+        onclick="history.back()"
+      ></i>
+    </div>
+    <div class="col fw-bold d-flex align-items-center">SEARCH INVENTORY</div>
+    <div class="col-2">
+      <a href="{% url 'basket'%}">
+        <i
+          class="bi bi-bag-plus position-relative"
+          style="color: black; font-size: 20px"
+        >
+          <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            style="font-size: 12px"
+          >
+            {{basket_count}}
+          </span>
+        </i>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% for message in messages %}
+<section class="container mt-5">
+  <div class="alert alert-primary" role="alert">{{message}}</div>
+</section>
+{% endfor %}
+
+<!-- New Search Component start  -->
+<section class="container my-5">
+  <form action="" method="POST" autocomplete="off">
+    {% csrf_token %}
+    <div class="row py-3 mx-0 rounded border" style="background-color: white">
+      <div class="col d-flex align-items-center">
+        <button
+          type="sumit"
+          class="border-0 p-0 m-0"
+          style="background-color: transparent"
+          name="search"
+        >
+          <i
+            class="bi bi-search card-icon text-secondary"
+            style="color: black"
+          ></i>
+        </button>
+      </div>
+      <div class="col-8 px-0">
+        <input
+          class="border-0 py-2 px-1"
+          style="background-color: white"
+          type="text"
+          placeholder="Med Name | QR Number"
+          name="search_input"
+          onfocus="infocus(this)"
+          onfocusout="outfocus()"
+        />
+      </div>
+      <div class="col d-flex align-items-center">
+        <a href="{% url 'scanner' %}">
+          <i class="bi bi-upc-scan card-icon"></i>
+        </a>
+      </div>
+    </div>
+  </form>
+</section>
+
+<!-- Search Results  -->
+<section class="container mt-5">
+  {% for data in medication_data %}
+  <div class="row">
+    <div class="col">
+      <a href="{% url 'inventory_details' data.id %}">
+        <div class="row mb-4">
+          <div class="col-3">
+            {% if data.Medication_Image %}
+            <img
+              class="meds-image"
+              src="{{data.Medication_Image.url}}"
+              alt=""
+            />
+            {% else %}
+            <i class="bi bi-capsule-pill image-icon"></i>
+            {% endif %}
+          </div>
+          <div class="col">
+            <h6 class="mb-0 fw-bold">{{data.Medication_Name}}</h6>
+            <p class="my-0">{{data.Description |truncatechars:80 }}</p>
+            <p class="mt-1">
+              Size :
+              <span style="color: #4f67ff">{{data.Medication_Size}}</span>
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-2">
+      <button
+        class="border-0 p-0 m-0"
+        style="background-color: transparent"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#addtobasket{{data.id}}"
+      >
+        <i class="bi bi-plus-circle-fill" style="color: #4f67ff"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- modal start  -->
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="addtobasket{{data.id}}"
+    tabindex="-1"
+    aria-labelledby="addtobasketLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h5 class="modal-title" id="addtobasketLabel">Add to Basket</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body py-5">
+          <form action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="d-flex justify-content-around">
+              <!-- <i
+                class="bi bi-dash-circle-fill quantity-icons"
+                id="subtract"
+                onclick="subtractQuantity(event)"
+              ></i> -->
+              <div style="width: 30%">
+                <center>
+                  <input
+                    type="number"
+                    class="border-0"
+                    value="1"
+                    style="width: 50%"
+                    name="quantity"
+                    id="quantity"
+                  />
+                  <hr />
+                </center>
+              </div>
+              <!-- <i
+                class="bi bi-plus-circle-fill quantity-icons"
+                id="increment"
+                onclick="addQuantity(event)"
+              ></i> -->
+            </div>
+            <input
+              type="text"
+              value="{{data.id}}"
+              name="med_ID"
+              hidden="True"
+            />
+            <button
+              type="submit"
+              name="stock_out"
+              class="btn py-3 my-3 button-style"
+            >
+              add to basket
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% empty %}
+  <center>
+    <h3>No Results Found</h3>
+    <h3>Try searching again</h3>
+  </center>
+  {% endfor %}
+</section>
+
+<div id="bottomNav">{% include 'partials/bottom_navbar.html' %}</div>
+<!-- divider  -->
+
+<script>
+  function addQuantity(event) {
+    event.preventDefault();
+    medQuantity = document.getElementById("quantity").value;
+    quantityAmount = parseInt(medQuantity) + 1;
+    document.getElementById("quantity").value = quantityAmount;
+
+    if (quantityAmount <= 0) {
+      document.getElementById("quantity").value = 1;
+    }
+  }
+
+  function subtractQuantity(event) {
+    event.preventDefault();
+    medQuantity = document.getElementById("quantity").value;
+    quantityAmount = parseInt(medQuantity) - 1;
+    document.getElementById("quantity").value = quantityAmount;
+
+    if (quantityAmount <= 0) {
+      document.getElementById("quantity").value = 1;
+    }
+  }
+
+  // hide bottom navbar when input in focus
+  function infocus(x) {
+    navbar = document.getElementById("bottomNav").style.display = "none";
+  }
+
+  // Show bottom navbar when out of focus
+  function outfocus() {
+    navbar = document.getElementById("bottomNav").style.display = "block";
+  }
+</script>
+{% endblock %}

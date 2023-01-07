@@ -1,0 +1,318 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+
+<style>
+  .avatar {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+  }
+
+  .image-icon {
+    font-size: 70px;
+  }
+</style>
+<section
+  class="container sticky-top pt-5 pb-3"
+  style="background-color: #f9f9fc"
+>
+  <!-- <div style="height: 30px; width: 100%"></div> -->
+  <div class="row">
+    <div class="col-2">
+      <i
+        class="bi bi-chevron-left"
+        style="color: black; font-size: 20px"
+        onclick="history.back()"
+      ></i>
+    </div>
+    <div class="col fw-bold d-flex align-items-center">
+      {{medication.Medication_Name}}
+    </div>
+    <div class="col-4">
+      <div class="d-flex justify-content-between">
+        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <i class="bi bi-plus-lg" style="color: #4f67ff; font-size: 20px"></i>
+        </a>
+
+        <a type="button" data-bs-toggle="modal" data-bs-target="#editStock">
+          <i
+            class="bi bi-pencil-square"
+            style="color: #4f67ff; font-size: 20px"
+          ></i>
+        </a>
+        <a href="{% url 'basket'%}">
+          <i
+            class="bi bi-bag-plus position-relative"
+            style="color: black; font-size: 20px"
+          >
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              style="font-size: 12px"
+            >
+              {{basket_count}}
+            </span>
+          </i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add Quantity Modal  -->
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Quantity</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body py-5">
+        <form action="" method="POST" autocomplete="off">
+          {% csrf_token %}
+
+          <div class="d-flex justify-content-around mb-3">
+            <!-- <div>
+              <i class="bi bi-dash-circle-fill quantity-icons"></i>
+            </div> -->
+            <div class="d-flex align-items-center" style="width: 30%">
+              <center>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  value="1"
+                  name="quantityUPdate"
+                />
+              </center>
+            </div>
+            <!-- <div>
+              <i class="bi bi-plus-circle-fill quantity-icons"></i>
+            </div> -->
+          </div>
+          <button
+            type="submit"
+            name="update-quantity"
+            class="btn text-white card-shadow py-3 my-3"
+            style="background-color: #4f67ff; width: 100%"
+          >
+            Update Inventory Quantity
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Product Form modal section start  -->
+<section>
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="editStock"
+    tabindex="-1"
+    aria-labelledby="editStockLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editStockLabel">
+            {{medication.Medication_Name}}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control floating-style"
+                id="floatingInput"
+                placeholder="medication name"
+                value="{{medication.Medication_Name}}"
+                name="medicationName"
+              />
+              <label for="floatingInput">Medication Name</label>
+            </div>
+            <div class="form-floating mb-3">
+              <textarea
+                class="form-control floating-style"
+                placeholder="Leave a comment here"
+                id="floatingTextarea2"
+                style="height: 200px"
+                name="description"
+              >
+              {{medication.Description}}
+            </textarea
+              >
+              <label for="floatingTextarea2">Description</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control floating-style"
+                id="floatingInput"
+                placeholder="size"
+                value="{{medication.Medication_Size}}"
+                name="size"
+              />
+              <label for="floatingInput">Size</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="number"
+                class="form-control floating-style"
+                id="floatingInput"
+                placeholder="restock level"
+                value="{{medication.ReStock_Level}}"
+                name="restock_level"
+              />
+              <label for="floatingInput">Restock Level</label>
+            </div>
+            <center>
+              <button
+                type="submit"
+                name="update_Inventory"
+                class="btn btn-style py-3 my-3 card-shadow text-white"
+                style="background-color: #4f67ff"
+              >
+                Update Inventory Item
+              </button>
+              <button
+                type="submit"
+                name="deleteStock"
+                class="btn btn-style py-3 my-3 text-black card-shadow bg-light border"
+              >
+                Delete From Inventory
+              </button>
+            </center>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% for message in messages %}
+<section class="container mt-5">
+  <div class="alert alert-primary" role="alert">{{message}}</div>
+</section>
+{% endfor %}
+
+<!-- Add to basket Modal  -->
+<section class="container mt-5">
+  <!-- Button trigger modal -->
+  <button
+    type="button"
+    class="btn text-white py-3 card-shadow"
+    style="background-color: #4f67ff; width: 100%"
+    data-bs-toggle="modal"
+    data-bs-target="#addtobasket"
+  >
+    ADD TO BASKET
+  </button>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="addtobasket"
+    tabindex="-1"
+    aria-labelledby="addtobasketLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addtobasketLabel">Add to basket</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-floating mb-4">
+              <input
+                type="number"
+                class="form-control floating-style"
+                id="floatingInput"
+                placeholder="restock level"
+                value="1"
+                name="Quantity"
+              />
+              <label for="floatingInput">Quantity</label>
+            </div>
+            <center>
+              <button
+                type="submit"
+                name="addBasket"
+                class="btn text-white py-3 card-shadow"
+                style="background-color: #4f67ff; width: 100%"
+              >
+                ADD TO BASKET
+              </button>
+            </center>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container mt-5">
+  <center>
+    {% if medication.Medication_Image %}
+    <img class="avatar" src="{{medication.Medication_Image.url}}" alt="" />
+    {% else %}
+    <i class="bi bi-image-fill image-icon"></i>
+    {% endif %}
+  </center>
+  <p class="mb-2 mt-5 headings text-secondary">Name</p>
+  <h6 class="main-text">{{medication.Medication_Name}}</h6>
+  <p class="mb-2 mt-5 headings text-secondary">Description</p>
+  <h6>{{medication.Description}}</h6>
+  <p class="mb-2 mt-5 headings text-secondary">Size</p>
+  <h6 class="main-text">{{medication.Medication_Size}}</h6>
+  <p class="mb-2 mt-5 headings text-secondary">Quantity in Stock</p>
+  {% if medication.Quantity <= medication.ReStock_Level %}
+  <h6 class="main-text text-danger">{{medication.Quantity}}</h6>
+  {% else %}
+  <h6 class="main-text">{{medication.Quantity}}</h6>
+  {% endif %}
+  <p class="mb-2 mt-5 headings text-secondary">Restock Level</p>
+  <h6 class="main-text text-danger">{{medication.ReStock_Level}}</h6>
+
+  <center>
+    <img class="mt-5" src="{{medication.Qr_image.url}}" alt="" />
+  </center>
+</section>
+
+{% include 'partials/bottom_navbar.html' %}
+<!-- divider  -->
+{% endblock %}

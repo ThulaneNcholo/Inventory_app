@@ -1,0 +1,404 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+
+<style>
+  /* scan Qr code style  */
+  .scan-icon {
+    font-size: 40px;
+  }
+</style>
+
+<section class="container">
+  <div class="row">
+    <div class="col-2">
+      <!-- <a href="#">
+        <i class="bi bi-chevron-left" style="color: black; font-size: 20px"></i>
+      </a> -->
+    </div>
+    <div class="col fw-bold d-flex align-items-center">QR CODE RESULTS</div>
+    <div class="col-2">
+      <a href="{% url 'basket'%}">
+        <i
+          class="bi bi-bag-plus position-relative"
+          style="color: black; font-size: 20px"
+        >
+          <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            style="font-size: 12px"
+          >
+            {{basket_count}}
+          </span>
+        </i>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% for message in messages %}
+<section class="container mt-5">
+  <div class="alert alert-primary" role="alert">{{message}}</div>
+</section>
+{% endfor %}
+
+<section class="container mt-5">
+  <h6 class="mb-5">Results</h6>
+
+  {% for data in inventory_data %}
+  <div class="row mb-4">
+    <div class="col-2">
+      {% if data.Medication_Image %}
+      <img class="meds-image" src="{{data.Medication_Image.url}}" alt="" />
+      {% else %}
+      <i class="bi bi-capsule-pill image-icon"></i>
+      {% endif %}
+    </div>
+    <div class="col">
+      <h6 class="mb-0 fw-bold">{{data.Medication_Name}}</h6>
+      <p class="my-0">{{data.Description |truncatechars:80 }}</p>
+      <p class="mt-1">
+        Size :
+        <span style="color: #4f67ff">{{data.Medication_Size}}</span>
+      </p>
+      <div class="row">
+        <div class="col">
+          <button
+            class="btn btn-light border card-shadow"
+            style="width: 100%"
+            data-bs-toggle="modal"
+            href="#exampleModalToggle"
+          >
+            <i class="bi bi-plus-circle-fill px-1"></i> Inventory
+          </button>
+        </div>
+        <div class="col">
+          <button
+            class="btn button-style card-shadow"
+            style="width: 100%"
+            data-bs-toggle="modal"
+            data-bs-target="#addToBasket"
+          >
+            <i class="bi bi-plus-circle-fill px-1"></i> Basket
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quantity Modal  -->
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="addToBasket"
+      tabindex="-1"
+      aria-labelledby="addToBasketLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addToBasketLabel">
+              Add Medical Basket
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="POST">
+              {% csrf_token %}
+              <div class="d-flex justify-content-around">
+                <i
+                  class="bi bi-dash-circle-fill quantity-icons"
+                  id="subtract"
+                  onclick="subtractQuantity(event)"
+                ></i>
+                <div style="width: 30%">
+                  <center>
+                    <input
+                      type="number"
+                      class="border-0"
+                      value="1"
+                      style="width: 50%"
+                      name="quantity"
+                      id="quantity"
+                    />
+                    <hr />
+                  </center>
+                </div>
+                <i
+                  class="bi bi-plus-circle-fill quantity-icons"
+                  id="increment"
+                  onclick="addQuantity(event)"
+                ></i>
+              </div>
+              <input
+                type="text"
+                value="{{data.id}}"
+                name="med_ID"
+                hidden="True"
+              />
+              <button
+                type="submit"
+                name="stock_out"
+                class="btn py-3 my-3 button-style"
+              >
+                add to basket
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add to Inventory modal  -->
+  <div
+    class="modal fade"
+    id="exampleModalToggle"
+    aria-hidden="true"
+    aria-labelledby="exampleModalToggleLabel"
+    tabindex="-1"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalToggleLabel">
+            Inventory Options
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body py-5">
+          <div class="row mb-3">
+            <div class="col-2">
+              <i class="bi bi-clipboard-data addStock-icons"></i>
+            </div>
+            <div class="col d-flex align-items-center">
+              <p class="offcanvas-p">
+                <span style="color: #4f67ff">{{data.Quantity}}</span>
+                Quantity in stock
+              </p>
+            </div>
+          </div>
+
+          <a href="{% url 'inventory_details' data.id %}">
+            <div class="row mb-3">
+              <div class="col-2">
+                <i class="bi bi-journal-medical addStock-icons"></i>
+              </div>
+              <div class="col d-flex align-items-center">
+                <p class="offcanvas-p">View Medication</p>
+              </div>
+            </div>
+          </a>
+
+          <a data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">
+            <div class="row mb-3">
+              <div class="col-2">
+                <i class="bi bi-box addStock-icons"></i>
+              </div>
+              <div class="col d-flex align-items-center">
+                <p class="offcanvas-p">Add inventory</p>
+              </div>
+            </div>
+          </a>
+
+          <a data-bs-target="#addBulkStock" data-bs-toggle="modal">
+            <div class="row">
+              <div class="col-2">
+                <i class="bi bi-boxes addStock-icons"></i>
+              </div>
+              <div class="col d-flex align-items-center">
+                <p class="offcanvas-p">Add Bulk</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Single Stock Add  -->
+  <div
+    class="modal fade"
+    id="exampleModalToggle2"
+    aria-hidden="true"
+    aria-labelledby="exampleModalToggleLabel2"
+    tabindex="-1"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalToggleLabel2">
+            Add Inventory
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body py-4">
+          <form action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="stockQuantity" class="form-label">Quantity</label>
+              <input
+                type="number"
+                class="form-control"
+                id="stockQuantity"
+                aria-describedby="stockQuantity"
+                value="1"
+                name="Quantity"
+                required
+              />
+              <div id="stockQuantity" class="form-text">
+                Update Stock Quantity
+              </div>
+            </div>
+            <button
+              type="submit"
+              name="addSingles"
+              class="btn button-style my-3"
+            >
+              ADD STOCK
+            </button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn"
+            data-bs-target="#exampleModalToggle"
+            data-bs-toggle="modal"
+          >
+            <i class="bi bi-arrow-left-circle-fill"></i> Back to Options
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulk Modal start  -->
+  <div
+    class="modal fade"
+    id="addBulkStock"
+    aria-hidden="true"
+    aria-labelledby="addBulkStock2"
+    tabindex="-1"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBulkStock2">Add Bulk Inventory</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body py-4">
+          <form action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="stockQuantity" class="form-label">Quantity</label>
+              <input
+                type="number"
+                class="form-control"
+                id="stockQuantity"
+                aria-describedby="stockQuantity"
+                name="bulkQuantity"
+                required
+              />
+              <div id="stockQuantity" class="form-text">
+                Quantity in single Box
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="stockQuantity" class="form-label">Boxes</label>
+              <input
+                type="number"
+                class="form-control"
+                id="stockQuantity"
+                aria-describedby="stockQuantity"
+                name="numberBoxes"
+                required
+              />
+              <div id="stockQuantity" class="form-text">How many Boxes</div>
+            </div>
+            <button type="submit" name="addBulk" class="btn button-style my-3">
+              ADD BULK STOCK
+            </button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn"
+            data-bs-target="#exampleModalToggle"
+            data-bs-toggle="modal"
+          >
+            <i class="bi bi-arrow-left-circle-fill"></i> Back to Options
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+
+<!-- scan qr code  -->
+<section class="container" style="margin-top: 100px">
+  <center>
+    <div>
+      <i class="bi bi-upc-scan scan-icon"></i>
+    </div>
+
+    <a href="{% url 'scanner' %}">
+      <button
+        class="btn text-white mt-5 px-5"
+        style="background-color: #4f67ff"
+      >
+        SCAN AGAIN
+      </button>
+    </a>
+  </center>
+</section>
+
+{% include 'partials/bottom_navbar.html' %}
+<!-- divider  -->
+<script>
+  function addQuantity(event) {
+    event.preventDefault();
+    medQuantity = document.getElementById("quantity").value;
+    quantityAmount = parseInt(medQuantity) + 1;
+    document.getElementById("quantity").value = quantityAmount;
+
+    if (quantityAmount <= 0) {
+      document.getElementById("quantity").value = 1;
+    }
+  }
+
+  function subtractQuantity(event) {
+    event.preventDefault();
+    medQuantity = document.getElementById("quantity").value;
+    quantityAmount = parseInt(medQuantity) - 1;
+    document.getElementById("quantity").value = quantityAmount;
+
+    if (quantityAmount <= 0) {
+      document.getElementById("quantity").value = 1;
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Noto sans fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      .app-fonts {
+        font-family: "Noto Sans", sans-serif;
+        padding-top: 88px;
+      }
+    </style>
+    <title>Create Pdf</title>
+  </head>
+  <body class="app-fonts">
+    <div style="display: flex; justify-content: center">
+      <button
+        onclick="window.print()"
+        style="
+          background-color: black;
+          padding: 8px;
+          border-radius: 10px;
+          color: #ffffff;
+        "
+      >
+        Download PDF
+      </button>
+    </div>
+
+    <section
+      style="
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin-top: 16px;
+      "
+    >
+      <!-- main label start  -->
+      <div
+        style="
+          height: 250px;
+          width: 250px;
+          border-style: solid;
+          border-color: lightgrey;
+          border-width: 2px;
+          background-color: #ffffff;
+        "
+      >
+        <div style="display: flex; justify-content: center">
+          <img
+            class="img-fluid"
+            src="{{logoImage.clinic_logo.url}}"
+            alt=""
+            style="height: 80px; width: 80px"
+          />
+        </div>
+
+        <div style="display: flex; justify-content: center">
+          <p
+            class="mb-2"
+            style="letter-spacing: 0.1px; margin-bottom: 8px; font-weight: 600"
+          >
+            {{label.Medication_ID.Medication_Name}}
+          </p>
+        </div>
+
+        <!-- instructions main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+          "
+        >
+          <!-- take div  -->
+          <div>
+            <p
+              class="text-secondary"
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Take
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Take}}
+            </p>
+          </div>
+          <!-- times div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Times/Day
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Times}}
+            </p>
+          </div>
+          <!-- Hours div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Every Hours
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Hours}}
+            </p>
+          </div>
+        </div>
+
+        <!-- Qr code main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            margin-top: 10px;
+          "
+        >
+          <div>
+            {% if label.before == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 4px;
+              "
+            >
+              Before Meals
+            </p>
+            {% endif %}
+            <!-- divider  -->
+            {% if label.after == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              After Meals
+            </p>
+            {% endif %}
+          </div>
+          <div>
+            <img
+              class=""
+              src="{{label.Medication_ID.Qr_image.url}}"
+              alt=""
+              style="height: 70px; width: 70px"
+            />
+          </div>
+          <div>
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                margin-bottom: 4px;
+                font-weight: 600;
+                color: grey;
+              "
+            >
+              Expire Date
+            </p>
+            <p style="letter-spacing: 0.1px; font-size: 8px; font-weight: 600">
+              {{label.ExpireDate}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- main label start  -->
+      <div
+        style="
+          height: 250px;
+          width: 250px;
+          border-style: solid;
+          border-color: lightgrey;
+          border-width: 2px;
+          background-color: #ffffff;
+        "
+      >
+        <div style="display: flex; justify-content: center">
+          <img
+            class="img-fluid"
+            src="{{logoImage.clinic_logo.url}}"
+            alt=""
+            style="height: 80px; width: 80px"
+          />
+        </div>
+
+        <div style="display: flex; justify-content: center">
+          <p
+            class="mb-2"
+            style="letter-spacing: 0.1px; margin-bottom: 8px; font-weight: 600"
+          >
+            {{label.Medication_ID.Medication_Name}}
+          </p>
+        </div>
+
+        <!-- instructions main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+          "
+        >
+          <!-- take div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Take
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Take}}
+            </p>
+          </div>
+          <!-- times div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Times/Day
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Times}}
+            </p>
+          </div>
+          <!-- Hours div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Every Hours
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Hours}}
+            </p>
+          </div>
+        </div>
+
+        <!-- Qr code main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            margin-top: 10px;
+          "
+        >
+          <div>
+            {% if label.before == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 4px;
+              "
+            >
+              Before Meals
+            </p>
+            {% endif %}
+            <!-- divider  -->
+            {% if label.after == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              After Meals
+            </p>
+            {% endif %}
+          </div>
+          <div>
+            <img
+              class=""
+              src="{{label.Medication_ID.Qr_image.url}}"
+              alt=""
+              style="height: 70px; width: 70px"
+            />
+          </div>
+          <div>
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                margin-bottom: 4px;
+                font-weight: 600;
+                color: grey;
+              "
+            >
+              Expire Date
+            </p>
+            <p style="letter-spacing: 0.1px; font-size: 8px; font-weight: 600">
+              {{label.ExpireDate}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      style="
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin-top: 16px;
+      "
+    >
+      <!-- main label start  -->
+      <div
+        style="
+          height: 250px;
+          width: 250px;
+          border-style: solid;
+          border-color: lightgrey;
+          border-width: 2px;
+          background-color: #ffffff;
+        "
+      >
+        <div style="display: flex; justify-content: center">
+          <img
+            class="img-fluid"
+            src="{{logoImage.clinic_logo.url}}"
+            alt=""
+            style="height: 80px; width: 80px"
+          />
+        </div>
+
+        <div style="display: flex; justify-content: center">
+          <p
+            class="mb-2"
+            style="letter-spacing: 0.1px; margin-bottom: 8px; font-weight: 600"
+          >
+            {{label.Medication_ID.Medication_Name}}
+          </p>
+        </div>
+
+        <!-- instructions main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+          "
+        >
+          <!-- take div  -->
+          <div>
+            <p
+              class="text-secondary"
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Take
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Take}}
+            </p>
+          </div>
+          <!-- times div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Times/Day
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Times}}
+            </p>
+          </div>
+          <!-- Hours div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Every Hours
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Hours}}
+            </p>
+          </div>
+        </div>
+
+        <!-- Qr code main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            margin-top: 10px;
+          "
+        >
+          <div>
+            {% if label.before == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 4px;
+              "
+            >
+              Before Meals
+            </p>
+            {% endif %}
+            <!-- divider  -->
+            {% if label.after == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              After Meals
+            </p>
+            {% endif %}
+          </div>
+          <div>
+            <img
+              class=""
+              src="{{label.Medication_ID.Qr_image.url}}"
+              alt=""
+              style="height: 70px; width: 70px"
+            />
+          </div>
+          <div>
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                margin-bottom: 4px;
+                font-weight: 600;
+                color: grey;
+              "
+            >
+              Expire Date
+            </p>
+            <p style="letter-spacing: 0.1px; font-size: 8px; font-weight: 600">
+              {{label.ExpireDate}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- main label start  -->
+      <div
+        style="
+          height: 250px;
+          width: 250px;
+          border-style: solid;
+          border-color: lightgrey;
+          border-width: 2px;
+          background-color: #ffffff;
+        "
+      >
+        <div style="display: flex; justify-content: center">
+          <img
+            class="img-fluid"
+            src="{{logoImage.clinic_logo.url}}"
+            alt=""
+            style="height: 80px; width: 80px"
+          />
+        </div>
+
+        <div style="display: flex; justify-content: center">
+          <p
+            class="mb-2"
+            style="letter-spacing: 0.1px; margin-bottom: 8px; font-weight: 600"
+          >
+            {{label.Medication_ID.Medication_Name}}
+          </p>
+        </div>
+
+        <!-- instructions main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+          "
+        >
+          <!-- take div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Take
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Take}}
+            </p>
+          </div>
+          <!-- times div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Times/Day
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Times}}
+            </p>
+          </div>
+          <!-- Hours div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Every Hours
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Hours}}
+            </p>
+          </div>
+        </div>
+
+        <!-- Qr code main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            margin-top: 10px;
+          "
+        >
+          <div>
+            {% if label.before == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 4px;
+              "
+            >
+              Before Meals
+            </p>
+            {% endif %}
+            <!-- divider  -->
+            {% if label.after == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              After Meals
+            </p>
+            {% endif %}
+          </div>
+          <div>
+            <img
+              class=""
+              src="{{label.Medication_ID.Qr_image.url}}"
+              alt=""
+              style="height: 70px; width: 70px"
+            />
+          </div>
+          <div>
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                margin-bottom: 4px;
+                font-weight: 600;
+                color: grey;
+              "
+            >
+              Expire Date
+            </p>
+            <p style="letter-spacing: 0.1px; font-size: 8px; font-weight: 600">
+              {{label.ExpireDate}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      style="
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin-top: 16px;
+      "
+    >
+      <!-- main label start  -->
+      <div
+        style="
+          height: 250px;
+          width: 250px;
+          border-style: solid;
+          border-color: lightgrey;
+          border-width: 2px;
+          background-color: #ffffff;
+        "
+      >
+        <div style="display: flex; justify-content: center">
+          <img
+            class="img-fluid"
+            src="{{logoImage.clinic_logo.url}}"
+            alt=""
+            style="height: 80px; width: 80px"
+          />
+        </div>
+
+        <div style="display: flex; justify-content: center">
+          <p
+            class="mb-2"
+            style="letter-spacing: 0.1px; margin-bottom: 8px; font-weight: 600"
+          >
+            {{label.Medication_ID.Medication_Name}}
+          </p>
+        </div>
+
+        <!-- instructions main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+          "
+        >
+          <!-- take div  -->
+          <div>
+            <p
+              class="text-secondary"
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Take
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Take}}
+            </p>
+          </div>
+          <!-- times div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Times/Day
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Times}}
+            </p>
+          </div>
+          <!-- Hours div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Every Hours
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Hours}}
+            </p>
+          </div>
+        </div>
+
+        <!-- Qr code main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            margin-top: 10px;
+          "
+        >
+          <div>
+            {% if label.before == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 4px;
+              "
+            >
+              Before Meals
+            </p>
+            {% endif %}
+            <!-- divider  -->
+            {% if label.after == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              After Meals
+            </p>
+            {% endif %}
+          </div>
+          <div>
+            <img
+              class=""
+              src="{{label.Medication_ID.Qr_image.url}}"
+              alt=""
+              style="height: 70px; width: 70px"
+            />
+          </div>
+          <div>
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                margin-bottom: 4px;
+                font-weight: 600;
+                color: grey;
+              "
+            >
+              Expire Date
+            </p>
+            <p style="letter-spacing: 0.1px; font-size: 8px; font-weight: 600">
+              {{label.ExpireDate}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- main label start  -->
+      <div
+        style="
+          height: 250px;
+          width: 250px;
+          border-style: solid;
+          border-color: lightgrey;
+          border-width: 2px;
+          background-color: #ffffff;
+        "
+      >
+        <div style="display: flex; justify-content: center">
+          <img
+            class="img-fluid"
+            src="{{logoImage.clinic_logo.url}}"
+            alt=""
+            style="height: 80px; width: 80px"
+          />
+        </div>
+
+        <div style="display: flex; justify-content: center">
+          <p
+            class="mb-2"
+            style="letter-spacing: 0.1px; margin-bottom: 8px; font-weight: 600"
+          >
+            {{label.Medication_ID.Medication_Name}}
+          </p>
+        </div>
+
+        <!-- instructions main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+          "
+        >
+          <!-- take div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Take
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Take}}
+            </p>
+          </div>
+          <!-- times div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Times/Day
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Times}}
+            </p>
+          </div>
+          <!-- Hours div  -->
+          <div>
+            <p
+              style="
+                font-size: 8px;
+                margin-bottom: 0px;
+                color: grey;
+                font-weight: 600;
+              "
+            >
+              Every Hours
+            </p>
+            <p
+              style="
+                font-size: 12px;
+                margin-top: 0px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              {{label.Hours}}
+            </p>
+          </div>
+        </div>
+
+        <!-- Qr code main div  -->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            margin-top: 10px;
+          "
+        >
+          <div>
+            {% if label.before == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 4px;
+              "
+            >
+              Before Meals
+            </p>
+            {% endif %}
+            <!-- divider  -->
+            {% if label.after == "Yes" %}
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                font-weight: 600;
+                margin-bottom: 0px;
+              "
+            >
+              After Meals
+            </p>
+            {% endif %}
+          </div>
+          <div>
+            <img
+              class=""
+              src="{{label.Medication_ID.Qr_image.url}}"
+              alt=""
+              style="height: 70px; width: 70px"
+            />
+          </div>
+          <div>
+            <p
+              style="
+                letter-spacing: 0.1px;
+                font-size: 8px;
+                margin-bottom: 4px;
+                font-weight: 600;
+                color: grey;
+              "
+            >
+              Expire Date
+            </p>
+            <p style="letter-spacing: 0.1px; font-size: 8px; font-weight: 600">
+              {{label.ExpireDate}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

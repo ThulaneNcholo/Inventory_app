@@ -1,0 +1,86 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+
+<style>
+  .scan-icon {
+    font-size: 40px;
+  }
+</style>
+<section class="container">
+  <div class="row">
+    <div class="col-2">
+      <i
+        class="bi bi-chevron-left"
+        style="color: black; font-size: 20px"
+        onclick="history.back()"
+      ></i>
+    </div>
+    <div class="col fw-bold d-flex align-items-center">SCAN QR CODE</div>
+    <div class="col-2">
+      <a href="{% url 'basket' %}">
+        <i class="bi bi-bag-plus" style="color: black; font-size: 20px"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- js file  -->
+<script src="{% static '/javascript/scanner.js' %}"></script>
+
+<section class="container" style="margin-top: 50px">
+  <div style="text-align: center">
+    <center>
+      <div id="reader" style="width: auto; max-width: 500px"></div>
+    </center>
+
+    <div id="show" style="display: none">
+      <h4>Scanned Result</h4>
+      <p style="color: blue" id="result"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Medical Basket  -->
+<section class="container" style="margin-top: 100px">
+  <center>
+    <div>
+      <i class="bi bi-upc-scan scan-icon"></i>
+    </div>
+
+    <a href="{% url 'basket' %}">
+      <button
+        class="btn text-white mt-5 px-5"
+        style="background-color: #4f67ff"
+      >
+        GO TO BASKET
+      </button>
+    </a>
+  </center>
+</section>
+
+{% include 'partials/bottom_navbar.html' %}
+<!-- divider  -->
+
+<script>
+  const html5Qrcode = new Html5Qrcode("reader");
+  const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+    if (decodedText) {
+      // document.getElementById("show").style.display = "block";
+      // document.getElementById("result").textContent = decodedText;
+      html5Qrcode.stop();
+      location.assign("http://127.0.0.1:8000/scan_Qr/" + decodedText);
+    }
+  };
+  const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+  html5Qrcode.start(
+    { facingMode: "environment" },
+    config,
+    qrCodeSuccessCallback
+  );
+</script>
+
+{% endblock %}

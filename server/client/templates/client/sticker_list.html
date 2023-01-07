@@ -1,0 +1,142 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+<section
+  class="container sticky-top pt-5 pb-3"
+  style="background-color: #f9f9fc"
+>
+  <div class="row">
+    <div class="col-2">
+      <i
+        class="bi bi-chevron-left"
+        style="color: black; font-size: 20px"
+        onclick="history.back()"
+      ></i>
+    </div>
+    <div class="col fw-bold d-flex align-items-center">MEDICATION LABELS</div>
+    <div class="col-3">
+      <div class="d-flex justify-content-between">
+        <!-- add offcanvas  -->
+        <a
+          data-bs-toggle="offcanvas"
+          href="#addbutton"
+          role="button"
+          aria-controls="addbutton"
+          style="color: black"
+        >
+          <i class="bi bi-plus-lg" style="font-size: 20px"></i>
+        </a>
+
+        <!-- filter offcanvas  -->
+        <a
+          data-bs-toggle="offcanvas"
+          href="#lowstockOptions"
+          role="button"
+          aria-controls="lowstockOptions"
+          style="color: black"
+        >
+          <i class="bi bi-funnel" style="font-size: 20px"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- New Search Component start  -->
+<section class="container my-5">
+  <form action="" method="POST" autocomplete="off">
+    {% csrf_token %}
+    <div class="row py-3 mx-0 rounded border" style="background-color: white">
+      <div class="col d-flex align-items-center">
+        <button
+          type="sumit"
+          class="border-0 p-0 m-0"
+          style="background-color: transparent"
+          name="search"
+        >
+          <i
+            class="bi bi-search card-icon text-secondary"
+            style="color: black"
+          ></i>
+        </button>
+      </div>
+      <div class="col-8 px-0">
+        <input
+          class="border-0 py-2 px-1"
+          style="background-color: white"
+          type="text"
+          placeholder="Med Name | QR Number"
+          name="search_input"
+          onfocus="infocus(this)"
+          onfocusout="outfocus()"
+        />
+      </div>
+      <div class="col d-flex align-items-center">
+        <a href="{% url 'scanner' %}">
+          <i class="bi bi-upc-scan card-icon"></i>
+        </a>
+      </div>
+    </div>
+  </form>
+</section>
+
+<!-- medication list  -->
+<section class="container">
+  {% for data in medication_data %}
+  <a href="{% url 'label' data.id %}" style="color: black">
+    <div class="bg-light">
+      <div class="row pt-4">
+        <div class="col-2">
+          {% if data.Medication_Image %}
+          <img class="meds-image" src="{{data.Medication_Image.url}}" alt="" />
+          {% else %}
+          <i class="bi bi-capsule-pill image-icon"></i>
+          {% endif %}
+        </div>
+        <div class="col">
+          <p class="mb-0 fw-bold">{{data.Medication_Name}}</p>
+          <p class="my-0">#{{data.Qr_Code}}</p>
+        </div>
+        <div class="col-4" style="font-size: 14px">
+          <p class="mb-0 text-secondary">{{data.date_created|date:"l,d M"}}</p>
+          {% if data.Quantity <= data.ReStock_Level %}
+          <p class="my-0 fw-bold text-danger">
+            {{data.Quantity}} <span style="color: #4f67ff">Qty</span>
+          </p>
+          {% else %}
+          <p class="my-0 fw-bold">
+            {{data.Quantity}} <span style="color: #4f67ff">Qty</span>
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </a>
+  {% empty %}
+  <center>
+    <h3 class="mt-4">No data Found</h3>
+  </center>
+  {% endfor %}
+</section>
+
+<!-- bottom navabr  -->
+<div id="bottomNav">{% include 'partials/bottom_navbar.html' %}</div>
+
+<!-- divider  -->
+
+<script>
+  // hide bottom navbar when input in focus
+  function infocus(x) {
+    navbar = document.getElementById("bottomNav").style.display = "none";
+  }
+
+  // Show bottom navbar when out of focus
+  function outfocus() {
+    navbar = document.getElementById("bottomNav").style.display = "block";
+  }
+</script>
+
+{% endblock %}

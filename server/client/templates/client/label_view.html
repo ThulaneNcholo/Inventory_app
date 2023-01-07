@@ -1,0 +1,242 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+
+{% block content %}
+<section
+  class="container sticky-top pt-5 pb-3"
+  style="background-color: #f9f9fc"
+>
+  <div class="row">
+    <div class="col-2">
+      <i
+        class="bi bi-chevron-left"
+        style="color: black; font-size: 20px"
+        onclick="history.back()"
+      ></i>
+    </div>
+    <div class="col fw-bold d-flex align-items-center">
+      {{label.Medication_Name}}
+    </div>
+    <div class="col-3">
+      <div class="d-flex justify-content-between">
+        <!-- add offcanvas  -->
+        <a
+          data-bs-toggle="offcanvas"
+          href="#addbutton"
+          role="button"
+          aria-controls="addbutton"
+          style="color: black"
+        >
+          <i class="bi bi-plus-lg" style="font-size: 20px"></i>
+        </a>
+
+        <!-- filter offcanvas  -->
+        <a
+          data-bs-toggle="offcanvas"
+          href="#lowstockOptions"
+          role="button"
+          aria-controls="lowstockOptions"
+          style="color: black"
+        >
+          <i class="bi bi-funnel" style="font-size: 20px"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container mt-3">
+  <form action="" method="POST" autocomplete="off">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="Take" class="form-label">Take</label>
+      <input
+        type="text"
+        class="form-control"
+        id="Take"
+        aria-describedby="Dosage"
+        placeholder="2 Tablets"
+        name="Take"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="Times/Day" class="form-label">Times/Day</label>
+      <input
+        type="text"
+        class="form-control"
+        id="Times/Day"
+        aria-describedby="Dosage"
+        placeholder="3"
+        name="Times"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="Hours" class="form-label">Every Hours</label>
+      <input
+        type="text"
+        class="form-control"
+        id="Hours"
+        aria-describedby="Dosage"
+        placeholder="4"
+        name="Hours"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="ExpireDate" class="form-label">Expiration date</label>
+      <input
+        type="date"
+        class="form-control"
+        id="ExpireDate"
+        aria-describedby="Dosage"
+        placeholder="4"
+        name="ExpireDate"
+      />
+    </div>
+
+    <div class="bg-white py-3 rounded border">
+      <div class="row mx-0">
+        <div class="col">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="Yes"
+              id="flexCheckDefault"
+              name="before"
+            />
+            <label class="form-check-label" for="flexCheckDefault">
+              Before Meals
+            </label>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="Yes"
+              id="flexCheckDefault"
+              name="after"
+            />
+            <label class="form-check-label" for="flexCheckDefault">
+              After Meals
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      name="createLabel"
+      class="btn button-style mt-3 py-3 card-shadow"
+    >
+      Save & Download
+    </button>
+  </form>
+</section>
+
+<!-- {% if Sticker_ID %}
+<section class="container mt-3">
+  <a href="{% url 'create-pdf' Sticker_ID.id %}">
+    <button class="btn button-style py-3 card-shadow">Download PDF</button>
+  </a>
+</section>
+{% endif %} -->
+
+<!-- Sticker start  -->
+<section class="container mt-5 d-flex justify-content-center">
+  <div class="bg-white border border-2" style="height: 250px; width: 250px">
+    <center>
+      <img
+        class="img-fluid"
+        src="{% static 'images/logo.png'%}"
+        alt=""
+        style="height: 80px; width: 80px"
+      />
+      <p class="fw-bold mb-2" style="letter-spacing: 0.1px">
+        {{label.Medication_Name}}
+      </p>
+    </center>
+
+    <div class="container">
+      <div class="row mt-3">
+        <div class="col">
+          <p class="mb-0 fw-bold text-secondary" style="font-size: 8px">Take</p>
+          <p class="mb-0 fw-bold" style="font-size: 12px">2 Tablets</p>
+        </div>
+        <div class="col">
+          <p class="mb-0 fw-bold text-secondary" style="font-size: 8px">
+            Times/Day
+          </p>
+          <p class="mb-0 fw-bold" style="font-size: 12px">1</p>
+        </div>
+        <div class="col">
+          <p class="mb-0 fw-bold text-secondary" style="font-size: 8px">
+            Every Hours
+          </p>
+          <p class="mb-0 fw-bold" style="font-size: 12px">4</p>
+        </div>
+      </div>
+
+      <!-- new desgin  -->
+      <div class="row mt-4">
+        <div class="col">
+          <div class="row mb-2">
+            <div class="col-1">
+              <i class="bi bi-app" style="font-size: 10px"></i>
+            </div>
+            <div class="col">
+              <p
+                class="fw-bold mb-0"
+                style="letter-spacing: 0.1px; font-size: 8px"
+              >
+                Before Meals
+              </p>
+            </div>
+          </div>
+          <div class="row mb-0">
+            <div class="col-1">
+              <i class="bi bi-app" style="font-size: 10px"></i>
+            </div>
+            <div class="col">
+              <p
+                class="fw-bold mb-0"
+                style="letter-spacing: 0.1px; font-size: 8px"
+              >
+                After Meals
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <img
+            class=""
+            src="{{label.Qr_image.url}}"
+            alt=""
+            style="height: 70px; width: 70px"
+          />
+        </div>
+        <div class="col">
+          <p
+            class="fw-bold text-secondary mb-1"
+            style="letter-spacing: 0.1px; font-size: 8px"
+          >
+            Expire Date
+          </p>
+          <p class="fw-bold mb-0" style="letter-spacing: 0.1px; font-size: 8px">
+            12 August 2024
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div style="height: 150px; width: 100%"></div>
+
+<!-- divider  -->
+
+{% endblock %}
